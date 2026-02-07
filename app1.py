@@ -1,8 +1,10 @@
 from flask import Flask, render_template_string, jsonify
 
-app = Flask(__name__)
+app = Flask(__name__)  # FIXED
 
+# =============================
 # Bot data with colors for each bot
+# =============================
 bots = [
     {
         "username": "@TAMPMAILOFFICIALBOT",
@@ -201,77 +203,25 @@ Fun and interactive AI conversation experience.""",
     }
 ]
 
+# =============================
 # HTML Template
+# =============================
 html_template = """
 <!DOCTYPE html>
 <html>
 <head>
   <title>VIP Bot Panel</title>
   <style>
-    body {
-      background: linear-gradient(135deg,#0a0a0a,#1a1a2e);
-      font-family: 'Arial Black', Arial, sans-serif;
-      color: #00ffff;
-      margin:0;
-      padding:0;
-      text-align:center;
-    }
-    .header {
-      text-align:center;
-      padding:60px 20px;
-      background:#0a0a0a;
-      box-shadow:0 0 50px cyan;
-    }
-    .header h1 {
-      font-size: 3em;
-      margin:0;
-      color: #00ffff;
-      text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 15px #ff00ff, 0 0 20px #ff00ff;
-    }
-    .header p {
-      font-size:1.5em;
-      color:#ffffff;
-      text-shadow: 0 0 5px purple;
-    }
-    .bot-card {
-      background:#0a0a0a;
-      margin:50px auto;
-      padding:50px;
-      border-radius:35px;
-      box-shadow:0 0 40px purple;
-      max-width:1000px;
-      transition:0.3s;
-      text-align:left;
-    }
-    .bot-card:hover {
-      transform: scale(1.05);
-    }
-    .bot-card h2 {
-      font-size: 3em;
-      margin-bottom: 20px;
-      text-align:center;
-      color: #00ff00;
-      text-shadow: 0 0 25px #00ff00;
-    }
-    .bot-card p {
-      font-size: 1.7em;
-      line-height:1.6em;
-      margin: 10px 0;
-    }
-    .bot-card a {
-      text-decoration: none;
-    }
-    .command {
-      background: #111111;
-      padding: 15px 25px;
-      margin: 10px 8px;
-      display: inline-block;
-      border-radius: 15px;
-      font-family: monospace;
-      font-size: 1.6em;
-      color: #00ffff;
-      box-shadow: 0 0 20px cyan;
-    }
+    body { background: linear-gradient(135deg,#0a0a0a,#1a1a2e); font-family: 'Arial Black', Arial, sans-serif; color: #00ffff; margin:0; padding:0; text-align:center; }
+    .header { text-align:center; padding:60px 20px; background:#0a0a0a; box-shadow:0 0 50px cyan; }
+    .header h1 { font-size:3em; margin:0; color:#00ffff; text-shadow:0 0 5px #00ffff,0 0 10px #00ffff,0 0 15px #ff00ff,0 0 20px #ff00ff; }
+    .header p { font-size:1.5em; color:#ffffff; text-shadow:0 0 5px purple; }
+    .bot-card { background:#0a0a0a; margin:50px auto; padding:50px; border-radius:35px; box-shadow:0 0 40px purple; max-width:1000px; transition:0.3s; text-align:left; }
+    .bot-card:hover { transform: scale(1.05); }
+    .bot-card h2 { font-size:3em; margin-bottom:20px; text-align:center; color:#00ff00; text-shadow:0 0 25px #00ff00; }
+    .bot-card p { font-size:1.7em; line-height:1.6em; margin:10px 0; }
+    .bot-card a { text-decoration:none; }
+    .command { background:#111111; padding:15px 25px; margin:10px 8px; display:inline-block; border-radius:15px; font-family:monospace; font-size:1.6em; color:#00ffff; box-shadow:0 0 20px cyan; }
   </style>
 </head>
 <body>
@@ -281,26 +231,29 @@ html_template = """
   </div>
 
   {% for bot in bots %}
-    <div class="bot-card">
-      <h2>{{ bot.name }}</h2>
-      <p><b>Username:</b> 
-        <a href="https://t.me/{{ bot.username[1:] }}" target="_blank" style="color: {{ bot.color }};">
-          {{ bot.username }}
-        </a>
-      </p>
-      <p>{{ bot.description|replace('\n','<br>')|safe }}</p>
-      <p><b>Commands:</b></p>
-      {% for cmd in bot.commands %}
-        <a href="https://t.me/{{ bot.username[1:] }}?start={{ cmd[1:] }}" target="_blank">
-          <span class="command">{{ cmd }}</span>
-        </a>
-      {% endfor %}
-    </div>
+  <div class="bot-card">
+    <h2>{{ bot.name }}</h2>
+    <p><b>Username:</b>
+      <a href="https://t.me/{{ bot.username[1:] }}" target="_blank" style="color: {{ bot.color }};">
+        {{ bot.username }}
+      </a>
+    </p>
+    <p>{{ bot.description|replace('\n','<br>')|safe }}</p>
+    <p><b>Commands:</b></p>
+    {% for cmd in bot.commands %}
+      <a href="https://t.me/{{ bot.username[1:] }}?start={{ cmd[1:] }}" target="_blank">
+        <span class="command">{{ cmd }}</span>
+      </a>
+    {% endfor %}
+  </div>
   {% endfor %}
 </body>
 </html>
 """
 
+# =============================
+# ROUTES
+# =============================
 @app.route("/")
 def home():
     return render_template_string(html_template, bots=bots)
@@ -309,5 +262,8 @@ def home():
 def get_bots():
     return jsonify(bots)
 
+# =============================
+# RUN SERVER
+# =============================
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080)

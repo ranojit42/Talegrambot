@@ -262,6 +262,15 @@ def home():
 def get_bots():
     return jsonify(bots)
 
+@app.route("/api/bot/<string:username>")
+def get_single_bot(username):
+    username = username.lower().replace("@","")
+    for bot in bots:
+        if bot["username"].lower().replace("@","") == username:
+            return jsonify(bot)
+    # Bot not found, show full panel instead
+    return render_template_string(html_template, bots=bots)
+
 # =============================
 # RUN SERVER
 # =============================
